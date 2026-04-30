@@ -38,7 +38,18 @@ object Dictionary {
    *
    */
   def loadFromFile(filePath: String, entityType: String): List[NamedEntity] = {
-    ???
+    val lines = FileIO.readLines(filePath)
+    lines.map { line =>
+      entityType match {
+        case "Person"              => new Person(line)
+        case "University"          => new University(line)
+        case "ProgrammingLanguage" => new ProgrammingLanguage(line)
+        case "Organization"        => new Organization(line)
+        case "Place"               => new Place(line)
+        case "Technology"          => new Technology(line)
+        case _ => throw new IllegalArgumentException(s"Tipo de entidad desconocido: $entityType")
+      }
+    }
   }
 
   /**
@@ -50,6 +61,16 @@ object Dictionary {
    *
    */
   def loadAll(): List[NamedEntity] = {
-    ???
+    val dictionariesToLoad = List(
+      ("data/people.txt", "Person"),
+      ("data/universities.txt", "University"),
+      ("data/languages.txt", "ProgrammingLanguage"),
+      ("data/organizations.txt", "Organization"),
+      ("data/places.txt", "Place")
+    )
+
+    dictionariesToLoad.flatMap { case (path, entityType) =>
+      loadFromFile(path, entityType)
+    }
   }
 }
