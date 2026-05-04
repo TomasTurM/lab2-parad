@@ -31,8 +31,24 @@ object Formatters {
    *   Si no se detectaron entidades, mostrar un mensaje indicándolo.
    */
   def formatNERResult(postTitle: String, entities: List[NamedEntity]): String = {
-    ???
+    val res: String = if (entities.isEmpty) {
+      "(sin entidades encontradas)"
+    } else {
+      entities.map(_.describe).mkString("\n")
+    }
+    s"""Post: ${postTitle} 
+    |Entidades detectadas:
+    |${res}
+    """.stripMargin
   }
+
+  /** para testear ejercicio 4
+val text = "Scala fue creado en EPFL por Martin Odersky"
+val dict = Dictionary.loadAll()
+val found = Analyzer.detectEntities(text, dict)
+val res = Formatters.formatNERResult(text, found)
+println(res)
+  */
 
   /**
    * Formatea un resumen de estadísticas de entidades por tipo.
