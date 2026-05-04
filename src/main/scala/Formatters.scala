@@ -67,6 +67,25 @@ println(res)
    *     University: 2
    */
   def formatEntityStats(counts: Map[String, Int]): String = {
-    ???
+    val header = "=== Estadísticas de entidades ==="
+    if (counts.isEmpty) {
+      s"$header\n(no se encontraron entidades)"
+    } else {
+      val estadisticas = counts.toList.sortBy(-_._2)
+        .map { case (entityType, count) => s"$entityType: $count" }.mkString("\n")
+      s"$header\n$estadisticas"
+    }
   }
+  
+  /** para testear ejercicio 5
+val entities = List(
+new Person("Alan Turing"),
+new ProgrammingLanguage("Scala"),
+new Person("Ada Lovelace"),
+new University("MIT")
+)
+val counts = Analyzer.countByType(entities)
+val res = Formatters.formatEntityStats(counts)
+println(res)
+  */
 }
