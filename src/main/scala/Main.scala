@@ -8,8 +8,7 @@ object Main {
     // ------------------------------------------------------------------
     // Paso 1: Cargar diccionarios
     // ------------------------------------------------------------------
-    // TODO (Ejercicio 2)
-    val dictionary: List[NamedEntity] = ???
+    val dictionary: List[NamedEntity] = Dictionary.loadAll()
 
     println(s"Diccionario cargado: ${dictionary.size} entidades.\n")
 
@@ -32,6 +31,14 @@ object Main {
     //   Para cada post:
     //     1. Detectar entidades
     //     2. Formatear y mostrar el resultado
+    allPosts.foreach{ case (_, titles) => 
+      titles.foreach{ title =>
+        val entities = Analyzer.detectEntities(title, dictionary)
+        val res = Formatters.formatNERResult(title, entities)
+
+        println(res)
+      }
+    }
 
     // ------------------------------------------------------------------
     // Paso 4: Estadísticas globales
@@ -40,6 +47,16 @@ object Main {
     //   1. Recolectar TODAS las entidades detectadas en todos los posts
     //   2. Contar por tipo
     //   3. Mostrar el resumen
+    val entities = allPosts.flatMap{ case (_, titles) => 
+      titles.flatMap{ title =>
+        Analyzer.detectEntities(title, dictionary)
+      }
+    }
+    // }.distinct
 
+    val counts = Analyzer.countByType(entities)
+    val stats = Formatters.formatEntityStats(counts)
+    
+    println(stats)
   }
 }
